@@ -4,14 +4,14 @@ namespace Parking.BLL.Entities
 {
     using System;
     using System.Linq;
+    using System.Net;
     using System.Timers;
 
+    using Parking.BLL.Dtos;
     using Parking.BLL.Interfaces;
 
-    public class ParkingEntity : IParking, IDisposable
+    public class ParkingEntity : IParkingEntity
     {
-        private static readonly Lazy<ParkingEntity> _parking = new Lazy<ParkingEntity>(() => new ParkingEntity());
-
         private readonly Logger _logger;
 
         private object _balanceLocker = new object();
@@ -22,7 +22,7 @@ namespace Parking.BLL.Entities
         private readonly Timer _chargeMoneyTimer;
         private readonly Timer _writeLogsTimer;
 
-        private ParkingEntity()
+        public ParkingEntity()
         {
             _logger = Logger.GetLogger();
 
@@ -32,7 +32,7 @@ namespace Parking.BLL.Entities
             try
             {
                 Cars = new List<Car>(Settings.ParkingSpace);
-                 _chargeMoneyTimer = new Timer(Settings.Timeout * 1000);
+                _chargeMoneyTimer = new Timer(Settings.Timeout * 1000);
                 _writeLogsTimer = new Timer(Settings.LogTimeout * 1000);
 
                 _chargeMoneyTimer.Elapsed += Charge;
@@ -68,16 +68,11 @@ namespace Parking.BLL.Entities
 
         public bool IsFreeSpaceInTheParking => GetFreeSlotsNumber() > 0;
 
-        public List<Car> Cars { get; set; }
+        public List<Car> Cars { get; }
 
-        public List<Transaction> Transactions { get; set; }
+        private List<Transaction> Transactions { get; }
 
-        public int Balance { get; set; }
-
-        public static ParkingEntity GetParking()
-        {
-            return _parking.Value;
-        }
+        public int Balance { get; private set; }
 
         public int GetFreeSlotsNumber()
         {
@@ -89,89 +84,16 @@ namespace Parking.BLL.Entities
             return Cars.Capacity - GetFreeSlotsNumber();
         }
 
-        public void ShowFormattedTransactionLog()
+        public string GetTransactionsLog()
         {
-            Console.WriteLine();
             lock (_loggerLocker)
             {
-                _logger.DumpLog();
+                return _logger.GetLogs();
             }
         }
 
-        public string AddCar(Car carToAdd)
+        public Car TopUpTheCar(Guid carIdToTopUp, int money)
         {
-            lock (_carLocker)
-            {
-                if (Cars.Contains(carToAdd))
-                {
-                    return "There are already such car on the parking";
-                }
-
-                if (!IsFreeSpaceInTheParking)
-                {
-                    return "The parking is full. remove some car and try again";
-                }
-
-                Cars.Add(carToAdd);
-
-                return $"{carToAdd} was successfully added on parking";
-            }
-        }
-
-        public string RemoveCar(string carIdToAdd)
-        {
-            if (!Guid.TryParse(carIdToAdd, out Guid carId))
-            {
-                return "Sorry, id is in wrong format";
-            }
-
-            try
-            {
-                lock (_carLocker)
-                {
-                    var carsToRemove = Cars.Where(c => c.Id == carId).ToList();
-
-                    if (!carsToRemove.Any())
-                    {
-                        return "Sorry, there no cars with such id";
-                    }
-
-                    if (carsToRemove.Count > 1)
-                    {
-                        lock (_loggerLocker)
-                        {
-                            _logger.LogError("Several cars with equal ids");
-                        }
-
-                        return "Sorry, there are several cars with such id. \nPlease, try another id";
-                    }
-
-                    if (carsToRemove[0].Balance < 0)
-                    {
-                        return "Sorry, car has a debt before parking and can't be removed from parking. \nPopulate the balance of the car and try again";
-                    }
-
-                    Cars.Remove(carsToRemove[0]);
-                    return $"{carsToRemove} was successfully removed from parking";
-                }
-            }
-            catch (ArgumentNullException e)
-            {
-                lock (_loggerLocker)
-                {
-                    _logger.LogError(e);
-                }
-                return "Error occured while removing car from parking. \nPlease try again later";
-            }
-        }
-
-        public string TopUpTheCar(Guid carIdToTopUp, int money)
-        {
-            if (money <= 0)
-            {
-                return "Input positive amount of money you want to top up";
-            }
-
             try
             {
                 lock (_carLocker)
@@ -180,7 +102,7 @@ namespace Parking.BLL.Entities
 
                     if (!carToTopUp.Any())
                     {
-                        return "Sorry, there no cars with such id";
+                        throw new HttpStatusCodeException((int)HttpStatusCode.NotFound, "Car with such id not found");
                     }
 
                     if (carToTopUp.Count > 1)
@@ -190,11 +112,11 @@ namespace Parking.BLL.Entities
                             _logger.LogError("Several cars with equal ids");
                         }
 
-                        return "Sorry, there are several cars with such id. \nPlease, try another id";
+                        throw new HttpStatusCodeException((int)HttpStatusCode.Conflict, "Several cars with equal ids");
                     }
 
                     carToTopUp[0].Balance += money;
-                    return $"The balance of {carIdToTopUp} was successfully topped up";
+                    return carToTopUp[0];
                 }
             }
             catch (ArgumentNullException e)
@@ -204,11 +126,11 @@ namespace Parking.BLL.Entities
                     _logger.LogError(e);
                 }
 
-                return "Error occured while topping up the car. \nPlease try again later";
+                return null;
             }
         }
 
-        public IEnumerable<Transaction> GetTransactionForLastMinute(DateTime timeNow)
+        public IEnumerable<Transaction> GetTransactionsForLastMinute(DateTime timeNow)
         {
             try
             {
@@ -227,7 +149,7 @@ namespace Parking.BLL.Entities
                     _logger.LogError(e);
                 }
 
-                return new List<Transaction>();
+                return null;
             }
             catch (ArgumentOutOfRangeException ex)
             {
@@ -237,13 +159,153 @@ namespace Parking.BLL.Entities
                     _logger.LogError(ex);
                 }
 
-                return new List<Transaction>();
+                return null;
+            }
+        }
+
+        public IEnumerable<Transaction> GetCarTransactionsForLastMinute(Guid carId)
+        {
+            try
+            {
+                lock (_carLocker)
+                {
+                    var cars = Cars.Where(c => c.Id == carId).ToList();
+
+                    if (!cars.Any())
+                    {
+                        throw new HttpStatusCodeException((int)HttpStatusCode.NotFound, "Car with such id not found");
+                    }
+
+                    if (cars.Count > 1)
+                    {
+                        lock (_loggerLocker)
+                        {
+                            _logger.LogError("Several cars with equal ids");
+                        }
+
+                        throw new HttpStatusCodeException((int)HttpStatusCode.Conflict, "Several cars with equal ids");
+                    }
+                }
+
+                var timeMinuteAgo = DateTime.Now.AddMinutes(-1);
+                lock (_transLocker)
+                {
+                    var transactions = Transactions.Where(t => t.TransactionDate > timeMinuteAgo && t.CarId == carId).ToList();
+                    return transactions;
+                }
+            }
+            catch (ArgumentNullException e)
+            {
+                Console.WriteLine(e.Message);
+                lock (_loggerLocker)
+                {
+                    _logger.LogError(e);
+                }
+
+                return null;
+            }
+            catch (ArgumentOutOfRangeException ex)
+            {
+                Console.WriteLine(ex);
+                lock (_loggerLocker)
+                {
+                    _logger.LogError(ex);
+                }
+
+                return null;
+            }
+        }
+
+        public Car AddCar(Car carToAdd)
+        {
+            lock (_carLocker)
+            {
+                if (!IsFreeSpaceInTheParking)
+                {
+                    return null;
+                }
+                Cars.Add(carToAdd);
+                return carToAdd;
+            }
+        }
+
+        public Car AddCar(CarDto carDto)
+        {
+            lock (_carLocker)
+            {
+                if (!IsFreeSpaceInTheParking)
+                {
+                    return null;
+                }
+
+                var car = new Car(carDto);
+                Cars.Add(car);
+                return car;
+            }
+        }
+
+        public Car GetCarById(Guid carId)
+        {
+            try
+            {
+                lock (_carLocker)
+                {
+                    var car = Cars.FirstOrDefault(c => c.Id == carId);
+                    return car;
+                }
+            }
+            catch (ArgumentNullException e)
+            {
+                lock (_loggerLocker)
+                {
+                    _logger.LogError(e);
+                }
+
+                return null;
+            }
+        }
+
+        public bool DeleteCarById(Guid carId)
+        {
+            try
+            {
+                lock (_carLocker)
+                {
+                    var carsToRemove = Cars.Where(c => c.Id == carId).ToList();
+
+                    if (!carsToRemove.Any())
+                    {
+                        throw new HttpStatusCodeException((int)HttpStatusCode.NotFound, "Car with such id not found");
+                    }
+
+                    if (carsToRemove.Count > 1)
+                    {
+                        lock (_loggerLocker)
+                        {
+                            _logger.LogError("Several cars with equal ids");
+                        }
+
+                        throw new HttpStatusCodeException((int)HttpStatusCode.Conflict, "Several cars with equal ids");
+                    }
+
+                    Cars.Remove(carsToRemove[0]);
+                    return true;
+                }
+            }
+            catch (ArgumentNullException e)
+            {
+                lock (_loggerLocker)
+                {
+                    _logger.LogError(e);
+                }
+
+                return false;
             }
         }
 
         public int CountIncomeForLastMinute()
         {
-            var transactions = GetTransactionForLastMinute(DateTime.Now);
+            var transactions = GetTransactionsForLastMinute(DateTime.Now);
 
             var sumOfTransactionsPayments = 0;
 
@@ -285,7 +347,7 @@ namespace Parking.BLL.Entities
 
         private void WriteLogs(object source, ElapsedEventArgs e)
         {
-            var transactions = GetTransactionForLastMinute(e.SignalTime);
+            var transactions = GetTransactionsForLastMinute(e.SignalTime);
 
             RemoveOldTransactions(e.SignalTime.AddMinutes(-1));
 

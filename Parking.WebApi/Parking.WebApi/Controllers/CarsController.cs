@@ -1,54 +1,155 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
+
 using Microsoft.AspNetCore.Mvc;
 
 namespace Parking.WebApi.Controllers
 {
+    using Parking.BLL.Dtos;
     using Parking.BLL.Interfaces;
 
     [Produces("application/json")]
     [Route("api/Cars")]
     public class CarsController : Controller
     {
-        private readonly IParking _parking;
-        public CarsController(IParking parking)
+        private readonly IParkingEntity _parking;
+        public CarsController(IParkingEntity parking)
         {
             _parking = parking;
         }
-        // GET: api/Cars
+
+
+        /// <summary>
+        /// GET: api/Cars
+        /// </summary>
+        /// <returns>
+        /// The <see cref="IActionResult"/>.
+        /// </returns>
         [HttpGet]
-        public IEnumerable<ICar> Get()
+        public IActionResult Get()
         {
-
-            return _parking.Cars;
+            var cars = _parking.Cars;
+            
+            return Ok(cars);
         }
-
-        // GET: api/Cars/5
+        
+        /// <summary>
+        /// GET: api/Cars/5
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IActionResult"/>.
+        /// </returns>
         [HttpGet("{id}", Name = "Get")]
-        public string Get(int id)
+        public IActionResult Get(string id)
         {
-            return "value";
+            if (!Guid.TryParse(id, out Guid guidCarId))
+            {
+                return BadRequest("Wrong id format");
+            }
+
+            var car = _parking.GetCarById(guidCarId);
+
+            if (car == null)
+            {
+                return NotFound();
+            }
+
+            return Ok(car);
         }
         
-        // POST: api/Cars
+        /// <summary>
+        /// api/Cars
+        /// </summary>
+        /// <param name="carDto">
+        /// The car dto.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IActionResult"/>.
+        /// </returns>
         [HttpPost]
-        public void Post([FromBody]string value)
+        public IActionResult Post([FromBody]CarDto carDto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var car = _parking.AddCar(carDto);
+
+            if (car == null)
+            {
+                return BadRequest("No free Space on the Parking"); // No Free Space on the Parking
+            }
+
+            var host = HttpContext.Request.Host;
+            var path = HttpContext.Request.Path;
+            var scheme = HttpContext.Request.Scheme;
+
+            return Created(new Uri($"{scheme}://{host.Value}{path.Value}/{car.Id}"), car);
         }
         
-        // PUT: api/Cars/5
+        /// <summary>
+        /// api/Cars/id
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <param name="carDto">
+        /// The car dto.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IActionResult"/>.
+        /// </returns>
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody]string value)
+        public IActionResult Put([FromRoute] string id, [FromBody]TopUpCarDto carDto)
         {
+            if (carDto.Balance <= 0)
+            {
+                return BadRequest("Input positive amount of money you want to top up");
+            }
+
+            if (!Guid.TryParse(id, out Guid guidCarId))
+            {
+                return BadRequest("Wrong id format");
+            }
+
+            var car = _parking.TopUpTheCar(guidCarId, carDto.Balance);
+
+            if (car == null)
+            {
+                return BadRequest("No free Space on the Parking"); // No Free Space on the Parking
+            }
+
+            return NoContent();
         }
-        
-        // DELETE: api/ApiWithActions/5
+
+        /// <summary>
+        /// The delete.
+        /// </summary>
+        /// <param name="id">
+        /// The id.
+        /// </param>
+        /// <returns>
+        /// The <see cref="IActionResult"/>.
+        /// </returns>
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public IActionResult Delete([FromRoute] string id)
         {
+            if (!Guid.TryParse(id, out Guid guidCarId))
+            {
+                return BadRequest("Wrong id format");
+            }
+
+            var response = _parking.DeleteCarById(guidCarId);
+
+            if (response)
+            {
+                return NoContent();
+            }
+
+            return StatusCode(500);
         }
     }
 }

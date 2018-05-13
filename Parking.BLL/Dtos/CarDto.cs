@@ -1,29 +1,26 @@
-﻿namespace Parking.BLL.Entities
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
+
+namespace Parking.BLL.Dtos
 {
-    using System;
+    using Parking.BLL.Entities;
 
-    using Parking.BLL.Dtos;
-    using Parking.BLL.Interfaces;
-
-    public class Car : ICar
+    public class CarDto
     {
         private int _balance;
 
         private CarType _typeOfCar;
 
-        public Car(CarDto carDto)
+        public CarDto()
         {
-            Balance = carDto.Balance;
-            TypeOfCar = carDto.TypeOfCar;
         }
 
-        public Car(int balance, CarType typeOfCar)
+        public CarDto(int balance, CarType typeOfCar)
         {
             Balance = balance;
             TypeOfCar = typeOfCar;
         }
-
-        public Guid Id { get; } = Guid.NewGuid();
 
         public int Balance
         {
@@ -56,7 +53,7 @@
         public override string ToString()
         {
             var message = Balance >= 0 ? $"has {Balance}$ money on Balance" : $"has {Math.Abs(Balance)}$ money Debt";
-            return $"Car {TypeOfCar.ToString()} with id: {Id}, {message}";
+            return $"Car {TypeOfCar.ToString()}, {message}";
         }
     }
 }

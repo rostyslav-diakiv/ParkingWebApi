@@ -1,0 +1,110 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Parking.WebApi</name>
+    </assembly>
+    <members>
+        <member name="M:Parking.WebApi.Controllers.CarsController.Get">
+            <summary>
+            GET: api/Cars
+            </summary>
+            <returns>
+            The <see cref="T:Microsoft.AspNetCore.Mvc.IActionResult"/>.
+            </returns>
+        </member>
+        <member name="M:Parking.WebApi.Controllers.CarsController.Get(System.String)">
+            <summary>
+            GET: api/Cars/5
+            </summary>
+            <param name="id">
+            The id.
+            </param>
+            <returns>
+            The <see cref="T:Microsoft.AspNetCore.Mvc.IActionResult"/>.
+            </returns>
+        </member>
+        <member name="M:Parking.WebApi.Controllers.CarsController.Post(Parking.BLL.Dtos.CarDto)">
+            <summary>
+            api/Cars
+            </summary>
+            <param name="carDto">
+            The car dto.
+            </param>
+            <returns>
+            The <see cref="T:Microsoft.AspNetCore.Mvc.IActionResult"/>.
+            </returns>
+        </member>
+        <member name="M:Parking.WebApi.Controllers.CarsController.Put(System.String,Parking.BLL.Dtos.TopUpCarDto)">
+            <summary>
+            api/Cars/id
+            </summary>
+            <param name="id">
+            The id.
+            </param>
+            <param name="carDto">
+            The car dto.
+            </param>
+            <returns>
+            The <see cref="T:Microsoft.AspNetCore.Mvc.IActionResult"/>.
+            </returns>
+        </member>
+        <member name="M:Parking.WebApi.Controllers.CarsController.Delete(System.String)">
+            <summary>
+            The delete.
+            </summary>
+            <param name="id">
+            The id.
+            </param>
+            <returns>
+            The <see cref="T:Microsoft.AspNetCore.Mvc.IActionResult"/>.
+            </returns>
+        </member>
+        <member name="M:Parking.WebApi.Middlewares.HttpStatusCodeExceptionMiddleware.Invoke(Microsoft.AspNetCore.Http.HttpContext)">
+            <summary>
+            The invoke.
+            </summary>
+            <param name="context">
+            The context.
+            </param>
+            <returns>
+            The <see cref="T:System.Threading.Tasks.Task"/>.
+            </returns>
+        </member>
+        <member name="T:MS.Common.Utils.SwaggerConfiguration">
+            <summary>
+            The swagger configuration.
+            </summary>
+        </member>
+        <member name="M:MS.Common.Utils.SwaggerConfiguration.ConfigureSwagger(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            Configures the swagger.
+            </summary>
+            <param name="services">
+            The service collection.
+            </param>
+            <param name="configs">
+            The configs.
+            </param>
+            <param name="microserviceName">
+            The microservice Name.
+            </param>
+            <returns>
+            The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.
+            </returns>
+        </member>
+        <member name="M:MS.Common.Utils.SwaggerConfiguration.UseConfiguredSwagger(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
+            <summary>
+            The use configured swagger.
+            </summary>
+            <param name="app">
+            The app.
+            </param>
+            <param name="microserviceName">
+            The microservice name.
+            </param>
+            <returns>
+            The <see cref="T:Microsoft.AspNetCore.Builder.IApplicationBuilder"/>.
+            </returns>
+        </member>
+    </members>
+</doc>

@@ -3,6 +3,7 @@
 namespace Parking.BLL.Entities
 {
     using System.IO;
+    using System.Threading.Tasks;
 
     using Parking.BLL.Interfaces;
 
@@ -67,6 +68,24 @@ namespace Parking.BLL.Entities
                     LogError(e);
                     Console.WriteLine("Error occurred while trying read from Transactions.log");
                 }
+            }
+        }
+
+        public string GetLogs()
+        {
+            try
+            {
+                using (StreamReader sr = File.OpenText(Settings.TransactionsLogFilePath))
+                {
+                    string line = sr.ReadToEnd();
+                    return line;
+                }
+            }
+            catch (Exception ex)
+            {
+                LogError(ex);
+                Console.WriteLine("Error occurred while trying read from Transactions.log");
+                return null;
             }
         }
 

@@ -1,18 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 
 namespace Parking.WebApi
 {
+    using MS.Common.Utils;
+
     using Parking.BLL.Entities;
     using Parking.BLL.Interfaces;
+    using Parking.WebApi.Extensions;
 
     public class Startup
     {
@@ -26,8 +23,9 @@ namespace Parking.WebApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.ConfigureSwagger(Configuration);
             services.AddMvc();
-            services.AddSingleton<IParking, ParkingEntity>();
+            services.AddSingleton<IParkingEntity, ParkingEntity>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -37,6 +35,10 @@ namespace Parking.WebApi
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseHttpStatusCodeExceptionMiddleware();
+
+            app.UseConfiguredSwagger();
 
             app.UseMvc();
         }
