@@ -1,0 +1,169 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Parking.WebApi</name>
+    </assembly>
+    <members>
+        <member name="M:Parking.WebApi.Controllers.CarsController.Get">
+            <summary>
+            Returns all cars on the parking
+            </summary>
+            <returns>
+            The <see cref="T:Microsoft.AspNetCore.Mvc.IActionResult"/>.
+            </returns>
+        </member>
+        <member name="M:Parking.WebApi.Controllers.CarsController.Get(System.String)">
+            <summary>
+            Returns car by id
+            </summary>
+            <param name="id">
+            The id.
+            </param>
+            <returns>
+            The <see cref="T:Microsoft.AspNetCore.Mvc.IActionResult"/>.
+            </returns>
+        </member>
+        <member name="M:Parking.WebApi.Controllers.CarsController.Post(Parking.BLL.Dtos.CarDto)">
+            <summary>
+            Adds car on the parking
+            </summary>
+            <param name="carDto">
+            The car dto.
+            </param>
+            <returns>
+            The <see cref="T:Microsoft.AspNetCore.Mvc.IActionResult"/>.
+            </returns>
+        </member>
+        <member name="M:Parking.WebApi.Controllers.CarsController.Delete(System.String)">
+            <summary>
+            The delete car by id
+            </summary>
+            <param name="id">
+            The id.
+            </param>
+            <returns>
+            The <see cref="T:Microsoft.AspNetCore.Mvc.IActionResult"/>.
+            </returns>
+        </member>
+        <member name="M:Parking.WebApi.Controllers.ParkingController.Get">
+            <summary>
+            Returns total income of the parking
+            </summary>
+            <returns>
+            The <see cref="T:Microsoft.AspNetCore.Mvc.IActionResult"/>.
+            </returns>
+        </member>
+        <member name="M:Parking.WebApi.Controllers.ParkingController.GetFreeSlots">
+            <summary>
+            Returns amount of free slots on the parking
+            </summary>
+            <returns>
+            The <see cref="T:Microsoft.AspNetCore.Mvc.IActionResult"/>.
+            </returns>
+        </member>
+        <member name="M:Parking.WebApi.Controllers.ParkingController.GetOccupiedSlots">
+            <summary>
+            Returns amount of occupied slots on the parking
+            </summary>
+            <returns>
+            The <see cref="T:Microsoft.AspNetCore.Mvc.IActionResult"/>.
+            </returns>
+        </member>
+        <member name="M:Parking.WebApi.Controllers.TransactionsController.GetForLastMinute">
+            <summary>
+            Gets all Transactions for the last minute
+            </summary>
+            <returns>
+            The <see cref="T:Microsoft.AspNetCore.Mvc.IActionResult"/>.
+            </returns>
+        </member>
+        <member name="M:Parking.WebApi.Controllers.TransactionsController.Put(System.String,Parking.BLL.Dtos.TopUpCarDto)">
+            <summary>
+            Updates car on the parking
+            </summary>
+            <param name="id">
+            The id.
+            </param>
+            <param name="carDto">
+            The car dto.
+            </param>
+            <returns>
+            The <see cref="T:Microsoft.AspNetCore.Mvc.IActionResult"/>.
+            </returns>
+        </member>
+        <member name="M:Parking.WebApi.Controllers.TransactionsController.Get(System.String)">
+            <summary>
+            Gets all car's Transactions for the last minute by car's id
+            </summary>
+            <param name="carId">
+            The car id.
+            </param>
+            <returns>
+            The <see cref="T:Microsoft.AspNetCore.Mvc.IActionResult"/>.
+            </returns>
+        </member>
+        <member name="M:Parking.WebApi.Controllers.TransactionsController.GetLogJson">
+            <summary>
+            Returns logs as json objects about parking's minute income 
+            </summary>
+            <returns>
+            The <see cref="T:Microsoft.AspNetCore.Mvc.IActionResult"/>.
+            </returns>
+        </member>
+        <member name="M:Parking.WebApi.Controllers.TransactionsController.GetLog">
+            <summary>
+            Returns logs in json format about parking's minute income 
+            </summary>
+            <returns>
+            The <see cref="T:Microsoft.AspNetCore.Mvc.IActionResult"/>.
+            </returns>
+        </member>
+        <member name="M:Parking.WebApi.Middlewares.HttpStatusCodeExceptionMiddleware.Invoke(Microsoft.AspNetCore.Http.HttpContext)">
+            <summary>
+            The invoke.
+            </summary>
+            <param name="context">
+            The context.
+            </param>
+            <returns>
+            The <see cref="T:System.Threading.Tasks.Task"/>.
+            </returns>
+        </member>
+        <member name="T:MS.Common.Utils.SwaggerConfiguration">
+            <summary>
+            The swagger configuration.
+            </summary>
+        </member>
+        <member name="M:MS.Common.Utils.SwaggerConfiguration.ConfigureSwagger(Microsoft.Extensions.DependencyInjection.IServiceCollection,Microsoft.Extensions.Configuration.IConfiguration)">
+            <summary>
+            Configures the swagger.
+            </summary>
+            <param name="services">
+            The service collection.
+            </param>
+            <param name="configs">
+            The configs.
+            </param>
+            <param name="microserviceName">
+            The microservice Name.
+            </param>
+            <returns>
+            The <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.
+            </returns>
+        </member>
+        <member name="M:MS.Common.Utils.SwaggerConfiguration.UseConfiguredSwagger(Microsoft.AspNetCore.Builder.IApplicationBuilder)">
+            <summary>
+            The use configured swagger.
+            </summary>
+            <param name="app">
+            The app.
+            </param>
+            <param name="microserviceName">
+            The microservice name.
+            </param>
+            <returns>
+            The <see cref="T:Microsoft.AspNetCore.Builder.IApplicationBuilder"/>.
+            </returns>
+        </member>
+    </members>
+</doc>
