@@ -29,7 +29,6 @@ namespace Parking.WebApi
                     {
                         logging.AddConfiguration(hostingContext.Configuration.GetSection("Logging"));
                         logging.AddConsole(options => options.IncludeScopes = true);
-                        logging.AddConsole();
                         logging.AddDebug();
                     })
                 .UseStartup<Startup>()

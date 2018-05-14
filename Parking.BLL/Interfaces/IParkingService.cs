@@ -4,9 +4,11 @@ using Parking.BLL.Dtos;
 
 namespace Parking.BLL.Interfaces
 {
+    using System.Collections.Specialized;
+
     using Parking.BLL.Entities;
 
-    public interface IParkingEntity : IDisposable
+    public interface IParkingService : IDisposable
     {
         int Balance { get; }
         List<Car> Cars { get; }
@@ -22,7 +24,8 @@ namespace Parking.BLL.Interfaces
         int GetFreeSlotsNumber();
         int GetOccupiedSlotsNumber();
         IEnumerable<Transaction> GetTransactionsForLastMinute(DateTime timeNow);
-        string GetTransactionsLog();
+        StringCollection GetTransactionsLog();
+        IEnumerable<LogDto> GetTransactionJsonLog();
         Car TopUpTheCar(Guid carIdToTopUp, int money);
         string ToString();
     }

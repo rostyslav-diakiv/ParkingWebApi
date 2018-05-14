@@ -1,7 +1,7 @@
 {
   "runtimeTarget": {
     "name": ".NETCoreApp,Version=v2.0",
-    "signature": "7eeae1fbc89ef927eb834f6f85971b07dd2533ea"
+    "signature": "736dc1c81b78afd3f5a95b5f6507f020d93da8cd"
   },
   "compilationOptions": {
     "defines": [
@@ -24,6 +24,7 @@
       "Parking.WebApi/1.0.0": {
         "dependencies": {
           "Microsoft.AspNetCore.All": "2.0.5",
+          "Microsoft.Extensions.Logging.EventLog": "2.0.2",
           "Microsoft.NETCore.App": "2.0.0",
           "Microsoft.VisualStudio.Web.CodeGeneration.Design": "2.0.2",
           "Newtonsoft.Json": "11.0.2",
@@ -2097,6 +2098,14 @@
         },
         "compile": {
           "lib/netstandard2.0/Microsoft.Extensions.Logging.Debug.dll": {}
+        }
+      },
+      "Microsoft.Extensions.Logging.EventLog/2.0.2": {
+        "runtime": {
+          "lib/net461/Microsoft.Extensions.Logging.EventLog.dll": {}
+        },
+        "compile": {
+          "lib/net461/Microsoft.Extensions.Logging.EventLog.dll": {}
         }
       },
       "Microsoft.Extensions.Logging.EventSource/2.0.0": {
@@ -5248,6 +5257,13 @@
       "sha512": "sha512-29Zn5m9yb4NEP+qbeLl+7F2lDskDfrs8NbrM8eJ+k/pYE8JksRUEFxHp1bcpGSfGP9w0pMQMOKrVcwD3u5sPog==",
       "path": "microsoft.extensions.logging.debug/2.0.0",
       "hashPath": "microsoft.extensions.logging.debug.2.0.0.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Logging.EventLog/2.0.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-oKa+YQkWod/Ty897IM+J0/Vzi3VtSUpNzHzcgm5t6jO4AOmMN3Oxqmy49u9SW2xvW7pTsdjb6CdUAcRNN2g6Fg==",
+      "path": "microsoft.extensions.logging.eventlog/2.0.2",
+      "hashPath": "microsoft.extensions.logging.eventlog.2.0.2.nupkg.sha512"
     },
     "Microsoft.Extensions.Logging.EventSource/2.0.0": {
       "type": "package",

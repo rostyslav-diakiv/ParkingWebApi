@@ -8,18 +8,19 @@ namespace Parking.WebApi.Controllers
     using Parking.BLL.Interfaces;
 
     [Produces("application/json")]
-    [Route("api/Cars")]
+    [Route("api/[controller]")]
     public class CarsController : Controller
     {
-        private readonly IParkingEntity _parking;
-        public CarsController(IParkingEntity parking)
+        private readonly IParkingService _parking;
+
+        public CarsController(IParkingService parking)
         {
             _parking = parking;
         }
 
 
         /// <summary>
-        /// GET: api/Cars
+        /// Returns all cars on the parking
         /// </summary>
         /// <returns>
         /// The <see cref="IActionResult"/>.
@@ -31,9 +32,9 @@ namespace Parking.WebApi.Controllers
             
             return Ok(cars);
         }
-        
+
         /// <summary>
-        /// GET: api/Cars/5
+        /// Returns car by id
         /// </summary>
         /// <param name="id">
         /// The id.
@@ -60,7 +61,7 @@ namespace Parking.WebApi.Controllers
         }
         
         /// <summary>
-        /// api/Cars
+        /// Adds car on the parking
         /// </summary>
         /// <param name="carDto">
         /// The car dto.
@@ -89,44 +90,9 @@ namespace Parking.WebApi.Controllers
 
             return Created(new Uri($"{scheme}://{host.Value}{path.Value}/{car.Id}"), car);
         }
-        
-        /// <summary>
-        /// api/Cars/id
-        /// </summary>
-        /// <param name="id">
-        /// The id.
-        /// </param>
-        /// <param name="carDto">
-        /// The car dto.
-        /// </param>
-        /// <returns>
-        /// The <see cref="IActionResult"/>.
-        /// </returns>
-        [HttpPut("{id}")]
-        public IActionResult Put([FromRoute] string id, [FromBody]TopUpCarDto carDto)
-        {
-            if (carDto.Balance <= 0)
-            {
-                return BadRequest("Input positive amount of money you want to top up");
-            }
-
-            if (!Guid.TryParse(id, out Guid guidCarId))
-            {
-                return BadRequest("Wrong id format");
-            }
-
-            var car = _parking.TopUpTheCar(guidCarId, carDto.Balance);
-
-            if (car == null)
-            {
-                return BadRequest("No free Space on the Parking"); // No Free Space on the Parking
-            }
-
-            return NoContent();
-        }
 
         /// <summary>
-        /// The delete.
+        /// The delete car by id
         /// </summary>
         /// <param name="id">
         /// The id.

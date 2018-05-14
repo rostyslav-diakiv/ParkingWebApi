@@ -17,6 +17,8 @@
 
         private static readonly string _transactionLogFilePath;
 
+        private static readonly string _transactionJsonLogFilePath;
+
         private static readonly string _exceptionsLogFilePath;
 
         private static ReadOnlyDictionary<CarType, int> _priceList = new ReadOnlyDictionary<CarType, int>(
@@ -39,6 +41,7 @@
                 }
 
                 _transactionLogFilePath = Path.Combine(logsDirPath, "Transactions.log");
+                _transactionJsonLogFilePath = Path.Combine(logsDirPath, "Transactions.json");
                 _exceptionsLogFilePath = Path.Combine(logsDirPath, "Exceptions.log");
             }
             catch (Exception e)
@@ -50,6 +53,8 @@
         public static ReadOnlyDictionary<CarType, int> PriceList => _priceList;
 
         public static string TransactionsLogFilePath => _transactionLogFilePath;
+
+        public static string TransactionsJsonLogFilePath => _transactionJsonLogFilePath;
 
         public static string ExceptionsLogFilePath => _exceptionsLogFilePath;
     }

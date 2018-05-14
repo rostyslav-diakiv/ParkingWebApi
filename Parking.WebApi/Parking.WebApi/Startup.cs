@@ -25,7 +25,7 @@ namespace Parking.WebApi
         {
             services.ConfigureSwagger(Configuration);
             services.AddMvc();
-            services.AddSingleton<IParkingEntity, ParkingEntity>();
+            services.AddSingleton<IParkingService, ParkingService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

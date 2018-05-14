@@ -3,6 +3,7 @@
 namespace Parking.BLL.Entities
 {
     using System;
+    using System.Collections.Specialized;
     using System.Linq;
     using System.Net;
     using System.Timers;
@@ -10,7 +11,7 @@ namespace Parking.BLL.Entities
     using Parking.BLL.Dtos;
     using Parking.BLL.Interfaces;
 
-    public class ParkingEntity : IParkingEntity
+    public class ParkingService : IParkingService
     {
         private readonly Logger _logger;
 
@@ -22,7 +23,7 @@ namespace Parking.BLL.Entities
         private readonly Timer _chargeMoneyTimer;
         private readonly Timer _writeLogsTimer;
 
-        public ParkingEntity()
+        public ParkingService()
         {
             _logger = Logger.GetLogger();
 
@@ -84,11 +85,19 @@ namespace Parking.BLL.Entities
             return Cars.Capacity - GetFreeSlotsNumber();
         }
 
-        public string GetTransactionsLog()
+        public StringCollection GetTransactionsLog()
         {
             lock (_loggerLocker)
             {
                 return _logger.GetLogs();
+            }
+        }
+
+        public IEnumerable<LogDto> GetTransactionJsonLog()
+        {
+            lock (_loggerLocker)
+            {
+                return _logger.GetJsonLogs();
             }
         }
 
@@ -355,6 +364,8 @@ namespace Parking.BLL.Entities
 
             lock (_loggerLocker)
             {
+                var logDto = new LogDto(sumOfTransactionsPayments, e.SignalTime, nameof(ParkingService));
+                _logger.LogJsonInfo(logDto);
                 _logger.LogInfo($"{sumOfTransactionsPayments}$ Parking earned this minute", e.SignalTime);
             }
         }
@@ -431,9 +442,9 @@ namespace Parking.BLL.Entities
         }
 
         /// <summary>
-        /// Finalizes an instance of the <see cref="ParkingEntity"/> class. Allows an object to try to free resources and perform other cleanup operations before it is reclaimed by garbage collection.
+        /// Finalizes an instance of the <see cref="ParkingService"/> class. Allows an object to try to free resources and perform other cleanup operations before it is reclaimed by garbage collection.
         /// </summary>
-        ~ParkingEntity()
+        ~ParkingService()
         {
             Dispose(false);
         }

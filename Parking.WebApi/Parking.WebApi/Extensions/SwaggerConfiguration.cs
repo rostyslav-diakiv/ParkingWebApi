@@ -1,6 +1,5 @@
 ﻿namespace MS.Common.Utils
 {
-    using System.Collections.Generic;
     using System.IO;
 
     using Microsoft.AspNetCore.Builder;
@@ -42,8 +41,8 @@
                     TermsOfService = "Knock yourself out",
                     Contact = new Contact
                     {
-                        Name = configs["Contacts:email"],
-                        Email = configs["Contacts:fullName"],
+                        Name = configs["Contacts:fullName"],
+                        Email = configs["Contacts:email"],
                         Url = configs["Contacts:webSite"]
                     },
                     License = new License

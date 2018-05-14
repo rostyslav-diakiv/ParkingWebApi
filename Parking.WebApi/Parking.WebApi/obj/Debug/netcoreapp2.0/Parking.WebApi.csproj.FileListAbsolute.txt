@@ -1,7 +1,3 @@
-C:\Users\rosti\Documents\Programming\BinaryStudion\ParkingWebApi\Parking.WebApi\Parking.WebApi\obj\Debug\netcoreapp2.0\Parking.WebApi.csprojResolveAssemblyReference.cache
-C:\Users\rosti\Documents\Programming\BinaryStudion\ParkingWebApi\Parking.WebApi\Parking.WebApi\obj\Debug\netcoreapp2.0\Parking.WebApi.csproj.CoreCompileInputs.cache
-C:\Users\rosti\Documents\Programming\BinaryStudion\ParkingWebApi\Parking.WebApi\Parking.WebApi\obj\Debug\netcoreapp2.0\Parking.WebApi.AssemblyInfoInputs.cache
-C:\Users\rosti\Documents\Programming\BinaryStudion\ParkingWebApi\Parking.WebApi\Parking.WebApi\obj\Debug\netcoreapp2.0\Parking.WebApi.AssemblyInfo.cs
 C:\Users\rosti\Documents\Programming\BinaryStudion\ParkingWebApi\Parking.WebApi\Parking.WebApi\bin\Debug\netcoreapp2.0\Parking.WebApi.xml
 C:\Users\rosti\Documents\Programming\BinaryStudion\ParkingWebApi\Parking.WebApi\Parking.WebApi\bin\Debug\netcoreapp2.0\Parking.WebApi.deps.json
 C:\Users\rosti\Documents\Programming\BinaryStudion\ParkingWebApi\Parking.WebApi\Parking.WebApi\bin\Debug\netcoreapp2.0\Parking.WebApi.runtimeconfig.json
@@ -10,6 +6,10 @@ C:\Users\rosti\Documents\Programming\BinaryStudion\ParkingWebApi\Parking.WebApi\
 C:\Users\rosti\Documents\Programming\BinaryStudion\ParkingWebApi\Parking.WebApi\Parking.WebApi\bin\Debug\netcoreapp2.0\Parking.WebApi.pdb
 C:\Users\rosti\Documents\Programming\BinaryStudion\ParkingWebApi\Parking.WebApi\Parking.WebApi\bin\Debug\netcoreapp2.0\Parking.BLL.dll
 C:\Users\rosti\Documents\Programming\BinaryStudion\ParkingWebApi\Parking.WebApi\Parking.WebApi\bin\Debug\netcoreapp2.0\Parking.BLL.pdb
+C:\Users\rosti\Documents\Programming\BinaryStudion\ParkingWebApi\Parking.WebApi\Parking.WebApi\obj\Debug\netcoreapp2.0\Parking.WebApi.csprojResolveAssemblyReference.cache
+C:\Users\rosti\Documents\Programming\BinaryStudion\ParkingWebApi\Parking.WebApi\Parking.WebApi\obj\Debug\netcoreapp2.0\Parking.WebApi.csproj.CoreCompileInputs.cache
+C:\Users\rosti\Documents\Programming\BinaryStudion\ParkingWebApi\Parking.WebApi\Parking.WebApi\obj\Debug\netcoreapp2.0\Parking.WebApi.AssemblyInfoInputs.cache
+C:\Users\rosti\Documents\Programming\BinaryStudion\ParkingWebApi\Parking.WebApi\Parking.WebApi\obj\Debug\netcoreapp2.0\Parking.WebApi.AssemblyInfo.cs
 C:\Users\rosti\Documents\Programming\BinaryStudion\ParkingWebApi\Parking.WebApi\Parking.WebApi\obj\Debug\netcoreapp2.0\Parking.WebApi.csproj.CopyComplete
 C:\Users\rosti\Documents\Programming\BinaryStudion\ParkingWebApi\Parking.WebApi\Parking.WebApi\obj\Debug\netcoreapp2.0\Parking.WebApi.dll
 C:\Users\rosti\Documents\Programming\BinaryStudion\ParkingWebApi\Parking.WebApi\Parking.WebApi\obj\Debug\netcoreapp2.0\Parking.WebApi.pdb

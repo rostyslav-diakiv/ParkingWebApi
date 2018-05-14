@@ -6,7 +6,7 @@
     <members>
         <member name="M:Parking.WebApi.Controllers.CarsController.Get">
             <summary>
-            GET: api/Cars
+            Returns all cars on the parking
             </summary>
             <returns>
             The <see cref="T:Microsoft.AspNetCore.Mvc.IActionResult"/>.
@@ -14,7 +14,7 @@
         </member>
         <member name="M:Parking.WebApi.Controllers.CarsController.Get(System.String)">
             <summary>
-            GET: api/Cars/5
+            Returns car by id
             </summary>
             <param name="id">
             The id.
@@ -25,22 +25,8 @@
         </member>
         <member name="M:Parking.WebApi.Controllers.CarsController.Post(Parking.BLL.Dtos.CarDto)">
             <summary>
-            api/Cars
+            Adds car on the parking
             </summary>
-            <param name="carDto">
-            The car dto.
-            </param>
-            <returns>
-            The <see cref="T:Microsoft.AspNetCore.Mvc.IActionResult"/>.
-            </returns>
-        </member>
-        <member name="M:Parking.WebApi.Controllers.CarsController.Put(System.String,Parking.BLL.Dtos.TopUpCarDto)">
-            <summary>
-            api/Cars/id
-            </summary>
-            <param name="id">
-            The id.
-            </param>
             <param name="carDto">
             The car dto.
             </param>
@@ -50,11 +36,84 @@
         </member>
         <member name="M:Parking.WebApi.Controllers.CarsController.Delete(System.String)">
             <summary>
-            The delete.
+            The delete car by id
             </summary>
             <param name="id">
             The id.
             </param>
+            <returns>
+            The <see cref="T:Microsoft.AspNetCore.Mvc.IActionResult"/>.
+            </returns>
+        </member>
+        <member name="M:Parking.WebApi.Controllers.ParkingController.Get">
+            <summary>
+            Returns total income of the parking
+            </summary>
+            <returns>
+            The <see cref="T:Microsoft.AspNetCore.Mvc.IActionResult"/>.
+            </returns>
+        </member>
+        <member name="M:Parking.WebApi.Controllers.ParkingController.GetFreeSlots">
+            <summary>
+            Returns amount of free slots on the parking
+            </summary>
+            <returns>
+            The <see cref="T:Microsoft.AspNetCore.Mvc.IActionResult"/>.
+            </returns>
+        </member>
+        <member name="M:Parking.WebApi.Controllers.ParkingController.GetOccupiedSlots">
+            <summary>
+            Returns amount of occupied slots on the parking
+            </summary>
+            <returns>
+            The <see cref="T:Microsoft.AspNetCore.Mvc.IActionResult"/>.
+            </returns>
+        </member>
+        <member name="M:Parking.WebApi.Controllers.TransactionsController.GetForLastMinute">
+            <summary>
+            Gets all Transactions for the last minute
+            </summary>
+            <returns>
+            The <see cref="T:Microsoft.AspNetCore.Mvc.IActionResult"/>.
+            </returns>
+        </member>
+        <member name="M:Parking.WebApi.Controllers.TransactionsController.Put(System.String,Parking.BLL.Dtos.TopUpCarDto)">
+            <summary>
+            Updates car on the parking
+            </summary>
+            <param name="id">
+            The id.
+            </param>
+            <param name="carDto">
+            The car dto.
+            </param>
+            <returns>
+            The <see cref="T:Microsoft.AspNetCore.Mvc.IActionResult"/>.
+            </returns>
+        </member>
+        <member name="M:Parking.WebApi.Controllers.TransactionsController.Get(System.String)">
+            <summary>
+            Gets all car's Transactions for the last minute by car's id
+            </summary>
+            <param name="carId">
+            The car id.
+            </param>
+            <returns>
+            The <see cref="T:Microsoft.AspNetCore.Mvc.IActionResult"/>.
+            </returns>
+        </member>
+        <member name="M:Parking.WebApi.Controllers.TransactionsController.GetLogJson">
+            <summary>
+            Returns logs as json objects about parking's minute income 
+            </summary>
+            <returns>
+            The <see cref="T:Microsoft.AspNetCore.Mvc.IActionResult"/>.
+            </returns>
+        </member>
+        <member name="M:Parking.WebApi.Controllers.TransactionsController.GetLog">
+            <summary>
+            Returns logs in json format about parking's minute income 
+            </summary>
             <returns>
             The <see cref="T:Microsoft.AspNetCore.Mvc.IActionResult"/>.
             </returns>

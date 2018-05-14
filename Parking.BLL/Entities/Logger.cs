@@ -2,9 +2,13 @@
 
 namespace Parking.BLL.Entities
 {
+    using System.Collections.Generic;
+    using System.Collections.Specialized;
     using System.IO;
-    using System.Threading.Tasks;
 
+    using Newtonsoft.Json;
+
+    using Parking.BLL.Dtos;
     using Parking.BLL.Interfaces;
 
     public class Logger : ILogger
@@ -25,6 +29,11 @@ namespace Parking.BLL.Entities
         public void LogInfo(string info, DateTime time)
         {
             Log(info, time, Settings.TransactionsLogFilePath);
+        }
+
+        public void LogJsonInfo(LogDto logDto)
+        {
+            LogJson(JsonConvert.SerializeObject(logDto), Settings.TransactionsJsonLogFilePath);
         }
 
         public void LogError(Exception ex)
@@ -71,20 +80,51 @@ namespace Parking.BLL.Entities
             }
         }
 
-        public string GetLogs()
+        public StringCollection GetLogs()
         {
+            StringCollection logLines = new StringCollection();
             try
             {
                 using (StreamReader sr = File.OpenText(Settings.TransactionsLogFilePath))
                 {
-                    string line = sr.ReadToEnd();
-                    return line;
+                    string line;
+                    while ((line = sr.ReadLine()) != null)
+                    {
+                        logLines.Add(line);
+                    }
+
+                    return logLines;
                 }
             }
             catch (Exception ex)
             {
                 LogError(ex);
                 Console.WriteLine("Error occurred while trying read from Transactions.log");
+                return null;
+            }
+        }
+
+        public IEnumerable<LogDto> GetJsonLogs()
+        {
+            ICollection<LogDto> logDtos = new List<LogDto>();
+            try
+            {
+                using (StreamReader sr = File.OpenText(Settings.TransactionsJsonLogFilePath))
+                {
+                    string line;
+                    while ((line = sr.ReadLine()) != null)
+                    {
+                        var logDto = JsonConvert.DeserializeObject<LogDto>(line);
+                        logDtos.Add(logDto);
+                    }
+                }
+
+                return logDtos;
+            }
+            catch (Exception ex)
+            {
+                LogError(ex);
+                Console.WriteLine("Error occurred while trying read from Transactions.json");
                 return null;
             }
         }
@@ -112,6 +152,35 @@ namespace Parking.BLL.Entities
                             tw.WriteLine($"{time.ToLongDateString()} {time.ToLongTimeString()}");
                             tw.WriteLine($" : {info}");
                             tw.WriteLine("--------------------------------------------");
+                        }
+                    }
+                }
+                catch (Exception e)
+                {
+                    LogError(e);
+                }
+            }
+        }
+
+        private void LogJson(string json, string path)
+        {
+            lock (_locker)
+            {
+                try
+                {
+                    if (!File.Exists(path))
+                    {
+                        File.Create(path).Dispose();
+                        using (var tw = new StreamWriter(path))
+                        {
+                            tw.WriteLine(json);
+                        }
+                    }
+                    else if (File.Exists(path))
+                    {
+                        using (var tw = new StreamWriter(path, true))
+                        {
+                            tw.WriteLine(json);
                         }
                     }
                 }
